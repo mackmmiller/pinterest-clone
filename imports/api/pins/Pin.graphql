@@ -1,0 +1,14 @@
+type Pin {
+  _id: String
+  title: String
+  url: String
+  author: String
+}
+
+type Query {
+  pins: [Pin]
+}
+
+type Mutation {
+  newPin(title: String, url: String): Pin
+}
