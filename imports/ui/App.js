@@ -7,16 +7,24 @@ import styled from 'styled-components';
 import Nav from './Nav';
 import Home from './Home';
 
-const App = ({ loading, client, user }) => {
-  if (loading) return null;
-  console.log(user);
+const filterPins = (pins, author) => pins.filter(pin => pin.author === author);
 
+const App = ({
+  loading, client, user, pins,
+}) => {
+  if (loading) return null;
   return (
     <Router>
       <Wrapper>
         <Nav client={client} user={user} />
         <Main>
-          <Route exact path="/" component={Home} />
+          <Switch>
+            <Route exact path="/" render={({ match }) => <Home pins={pins} user={user} />} />
+            <Route
+              path="/pins/:id"
+              render={({ match }) => <Home pins={filterPins(pins, match.params.id)} user={user} />}
+            />
+          </Switch>
         </Main>
       </Wrapper>
     </Router>

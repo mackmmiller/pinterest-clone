@@ -5,10 +5,11 @@ type Pin {
   author: String
 }
 
-type Query {
+extend type Query {
   pins: [Pin]
 }
 
 type Mutation {
   newPin(title: String, url: String): Pin
+  deletePin(pinId: String): Int
 }

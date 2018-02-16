@@ -1,10 +1,10 @@
-import Pins from "./pins";
+import Pins from './pins';
 
 export default {
   Query: {
     pins(obj, args) {
       return Pins.find({}).fetch();
-    }
+    },
   },
 
   Mutation: {
@@ -12,9 +12,13 @@ export default {
       const pinId = Pins.insert({
         title,
         url,
-        author: userId
+        author: userId,
       });
       return Pins.findOne(pinId);
-    }
-  }
+    },
+    deletePin(obj, { pinId }, { userId }) {
+      const PinId = Pins.remove(pinId);
+      return 1;
+    },
+  },
 };

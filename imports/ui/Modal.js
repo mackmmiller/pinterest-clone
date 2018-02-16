@@ -1,36 +1,74 @@
-import React from 'react';
+import React, { Component } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 
-const Modal = ({ handleClick }) => (
-  <Wrapper className="wrapper" onClick={handleClick}>
-    <Content>
-      <Form>
-        <h2>New Pin</h2>
-        <label htmlFor="title">
-          Title
-          <input type="text" name="title" />
-        </label>
-        <label htmlFor="url">
-          Image URL
-          <input type="text" name="url" />
-        </label>
-        <button>Submit</button>
-      </Form>
-    </Content>
-  </Wrapper>
-);
+const newPin = gql`
+  mutation newPin($title: String!, $url: String!) {
+    newPin(title: $title, url: $url) {
+      _id
+    }
+  }
+`;
 
-Modal.propTypes = {
-  handleClick: PropTypes.func,
-};
+class Modal extends Component {
+  static propTypes = {
+    handleClick: PropTypes.func,
+  };
 
-export default Modal;
+  submitPin = (e) => {
+    e.preventDefault();
+    this.props
+      .newPin({
+        variables: {
+          title: this.title.value,
+          url: this.url.value,
+        },
+      })
+      .catch(err => console.log(err));
+  };
+
+  render() {
+    const { handleClick } = this.props;
+    return (
+      <Wrapper className="wrapper" onClick={handleClick}>
+        <Content>
+          <Form onSubmit={this.submitPin}>
+            <h2>New Pin</h2>
+            <label htmlFor="title">
+              Title
+              <input type="text" name="title" ref={input => (this.title = input)} />
+            </label>
+            <label htmlFor="url">
+              Image URL
+              <input type="text" name="url" ref={input => (this.url = input)} />
+            </label>
+            <input type="submit" />
+          </Form>
+        </Content>
+      </Wrapper>
+    );
+  }
+}
+
+export default graphql(newPin, { name: 'newPin', options: { refetchQueries: ['Users'] } })(Modal);
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
+  > h2 {
+    font-size: 2.4rem;
+  }
+  > label {
+    padding: 1rem 0;
+    font-size: 1.6rem;
+    > input {
+      width: 100%;
+    }
+  }
 `;
 
 const Wrapper = styled.div`
@@ -46,8 +84,6 @@ const Content = styled.div`
   position: fixed;
   top: 50%;
   left: 50%;
-  width: 50rem;
-  height: 45rem;
   background: #6a66a3;
   padding: 2rem;
   transform: translate(-50%, -50%);

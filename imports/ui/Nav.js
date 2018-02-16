@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { createPortal } from 'react-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -49,12 +50,12 @@ class Nav extends Component {
         <StyledNav>
           <ul>
             <li>
-              <button>Home</button>
+              <Link to="/">Home</Link>
             </li>
-            {user ? (
+            {user._id ? (
               <Fragment>
                 <li>
-                  <button onClick={this.filterPins}>My Pins</button>
+                  <Link to={`pins/${user._id}`}>My Pins</Link>
                 </li>
                 <li>
                   <button onClick={this.openModal}>New Pin</button>

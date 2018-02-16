@@ -1,6 +1,6 @@
 import React from 'react';
-import { render } from 'react-dom';
 import { Meteor } from 'meteor/meteor';
+import { render } from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, from } from 'apollo-link';
 import { ApolloClient } from 'apollo-client';
